@@ -1,0 +1,69 @@
+//Remove Minimum coins such that absolute difference between any two piles is less than K
+import java.util.*;
+//Remove Minimum coins such that absolute difference between any two piles is less than K
+
+class Solution {
+	
+	public static int remove_coins(int arr[],int k) {
+		
+		Arrays.sort(arr);
+		
+		int i = 0;
+		int j = arr.length-1;
+		int remove = 0;
+		while(i<j) {
+			if(arr[j]-arr[i]>k) {
+				while(arr[j]-arr[i]>k){
+					arr[j]-=1;
+					remove++;
+				}
+				i++;
+				j--;
+			}else if(arr[j]-arr[i]<=k) {
+				i++;
+				j--;
+			}
+		}
+		return remove;
+	}
+	public static void main(String[] args) {
+		
+		int arr[] = {1,3};
+		System.out.println(remove_coins(arr,1));
+	}
+}
+
+import java.util.*;
+//Remove Minimum coins such that absolute difference between any two piles is less than K
+
+class Solution {
+	
+	public static int min_value(int arr[]) {
+		int min = Integer.MAX_VALUE;
+		for(int i:arr) {
+			if(min>i) {
+				min =i;
+			}
+		}
+		return min;
+	}
+	public static int remove_coins(int arr[],int k) {
+		
+		int count = 0;
+		int min = min_value(arr);
+		
+		for(int i=0;i<arr.length;i++) {
+			int diff = arr[i]-min;
+			
+			if(diff>k) {
+				count+=(diff-k);
+			}
+		}
+		return count;
+	}
+	public static void main(String[] args) {
+		
+		int arr[] = {1,3};
+		System.out.println(remove_coins(arr,0));
+	}
+}
