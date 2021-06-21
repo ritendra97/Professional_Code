@@ -1,0 +1,179 @@
+
+import java.io.*;
+import java.util.*;
+
+  public class Main {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br =
+            new BufferedReader(new InputStreamReader(System.in));
+        int tc = Integer.parseInt(br.readLine().trim());
+        while (tc-- > 0) {
+            String[] inputLine;
+            inputLine = br.readLine().trim().split(" ");
+            int k = Integer.parseInt(inputLine[0]);
+            inputLine = br.readLine().trim().split(" ");
+            int n = Integer.parseInt(inputLine[0]);
+            int[] arr = new int[n];
+            inputLine = br.readLine().trim().split(" ");
+            for (int i = 0; i < n; i++) {
+                arr[i] = Integer.parseInt(inputLine[i]);
+            }
+
+            int ans = new Solution().getMinDiff(arr, n, k);
+            System.out.println(ans);
+        }
+    }
+}// } Driver Code Ends
+
+
+// User function Template for Java
+
+class Solution 
+{
+   class pair
+   {
+	    int value;
+    	int index;
+    	pair(int value,int index)
+	    {
+		    this.value=value;
+		    this.index=index;
+	    }
+    }
+    int getMinDiff(int[] arr, int n, int k) 
+    {
+        ArrayList<pair> desiredheights = new ArrayList<pair>();
+		
+		for(int i=0;i<n;i++)
+		{
+			if(arr[i]-k>0)
+				desiredheights.add(new pair(arr[i]-k,i));
+			desiredheights.add(new pair(arr[i]+k,i));
+		}
+		
+		Collections.sort(desiredheights,new Comparator<pair>() {
+			public int compare(pair p1,pair p2)
+			{
+				return p1.value-p2.value;
+			}
+		});
+		
+		int ele  =0;
+		int left =0;
+		int right=0;
+		int size =desiredheights.size();
+		int ans = 0;
+		
+		int visited[] = new int[n];
+		
+	    while(ele<n && right<size)
+	    {
+	    	if(visited[desiredheights.get(right).index]==0)
+	    		ele++;
+	    	visited[desiredheights.get(right).index]++;
+	    	right++;
+	    }
+	    
+	    ans = (desiredheights.get(right-1).value-desiredheights.get(left).value);
+	    
+	    while(right<size)
+	    {
+	    	if(visited[desiredheights.get(left).index]==1)
+	    		ele--;
+	    	visited[desiredheights.get(left).index]--;
+	    	left++;
+	    	
+	    	while(ele<n && right<size)
+		    {
+		    	if(visited[desiredheights.get(right).index]==0)
+		    		ele++;
+		    	visited[desiredheights.get(right).index]++;
+		    	right++;
+		    }
+	    	if(ele==n)
+	    	{
+	    		ans = Math.min(ans, desiredheights.get(right-1).value-desiredheights.get(left).value);
+	    	}
+	    	else 
+	    		break;
+	    }
+	    return ans;
+    }
+}
+
+//
+import java.util.*;
+//Minimize the Heights II 
+class Solution {
+	
+	static class pair{
+		
+		int value;
+		int index;
+		pair(int value,int index){
+			this.value = value;
+			this.index = index;
+		}
+
+	}
+	
+	public static int getMinDiff(int[] arr, int n, int k) {
+        
+		ArrayList<pair> p = new ArrayList<>();
+        
+        for(int i=0;i<n;i++) {
+        	
+        	p.add(new pair(arr[i]+k,i));
+        	
+        	if(arr[i]-k>0) {
+        		p.add(new pair(arr[i]-k,i));
+        	}
+        }
+        
+        Collections.sort(p,new Comparator<pair>() {
+        	public int compare(pair p1,pair p2) {
+        		return p1.value-p2.value;
+        	}
+        });
+        
+        int visited[] = new int[n];
+        
+        int element=0;
+        int left=0;
+        int right=0;
+        int min_difference=Integer.MAX_VALUE;
+        
+        while(right<p.size() && left<p.size()) {
+        	
+        	while(right<p.size() && element<n) {
+        		
+        		if(visited[p.get(right).index]==0) {
+        			visited[p.get(right).index]++;
+        			element++;;
+            	}else {
+            		visited[p.get(right).index]++;
+            	}
+        		right++;
+        	}
+        	
+        	int diff= p.get(right-1).value - p.get(left).value; 
+        	
+        	if(diff<min_difference) {
+        		min_difference=diff;
+        	}
+        	visited[p.get(left).index]--;
+        	if(visited[p.get(left).index]==0) {
+        		element--;
+        	}
+        	left++;
+        }
+        return min_difference;
+    }
+	public static void main(String[] args) {	
+	
+		int K = 3, N = 5;
+		int Arr[] = {3, 9, 12, 16, 20};
+		System.out.println(getMinDiff(Arr, N, K));
+	}
+}
