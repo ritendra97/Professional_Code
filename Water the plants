@@ -1,0 +1,68 @@
+//Water the plants 
+import java.util.*;
+
+class pair{
+	int first;
+	int second;
+	
+	pair(int f,int s) {
+		
+		this.first=f;
+		this.second=s;
+	}
+}
+class Solution {
+	
+	public static int min_sprinklers(int gallery[], int n) {
+      
+		ArrayList<pair> fill = new ArrayList<pair>();
+		
+		for(int i=0;i<n;i++) {
+			
+			if(gallery[i]>-1) {
+				fill.add(new pair(i-gallery[i],i+gallery[i]));
+			}
+		}
+		
+		Collections.sort(fill,new Comparator<pair>() {
+			
+			public int compare(pair p1,pair p2) {
+				return p1.first-p2.first;
+			}	
+		});
+		
+		int maxRight=0;
+		int res=0;
+		int i=0;
+		
+		while (maxRight < n) {
+			  
+		     if (i == fill.size() || fill.get(i).first > maxRight) {
+		          return -1;
+		     }
+		        
+		     int currMax = fill.get(i).second;
+		  
+		     while (i + 1 < fill.size() && fill.get(i + 1).first <= maxRight) {
+		  
+		         i++;
+		         currMax = Math.max(currMax, fill.get(i).second);
+		     }
+		  
+		     if (currMax < maxRight) {
+		            return -1;
+		     }
+		     res++;
+		     maxRight = currMax + 1;
+		     i++;
+		}
+	    return res;
+    }
+   	public static void main(String[] args) {
+   		
+   		int gallery [] = {-1, 2, 2, -1, 0, 0};
+   		int n = 6;
+   		System.out.println(min_sprinklers(gallery,n));
+	
+   	}
+}
